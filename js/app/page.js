@@ -571,7 +571,15 @@ define([
 
             // set default values for map tracking checkbox
             // -> always "enable"
-            mapTrackingCheckbox.bootstrapToggle('on');
+            let player_tracking = Util.getCookie('player_tracking_toggle');
+            console.log("Tracking: " + player_tracking);
+
+            if (player_tracking == ''){
+                Util.setCookie('player_tracking_toggle', 'off', 7, 'd')
+                player_tracking = 'off'
+            }
+            console.log("Tracking: " + player_tracking);
+            mapTrackingCheckbox.bootstrapToggle(player_tracking);
 
             mapTrackingCheckbox.on('change', e => {
                 let value = $(e.target).is(':checked');
@@ -582,8 +590,12 @@ define([
                     tracking = 'on';
                     trackingText = 'New connections will actually be added';
                     trackingType = 'success';
+                    Util.setCookie('player_tracking_toggle', 'on', 7, 'd')
+                } else {
+                    Util.setCookie('player_tracking_toggle', 'off', 7, 'd')
                 }
-
+                
+                console.log("Tracking: " + tracking);
                 Util.showNotify({title: 'Map tracking: ' + tracking, text: trackingText, type: trackingType}, false);
             });
 
